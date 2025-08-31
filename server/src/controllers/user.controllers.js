@@ -21,7 +21,6 @@ const genarateAccessAndRefreshToken = async (userId) => {
       validateBeforeSave: false,
     });
     return { accessToken, refreshToken };
-    console.log("accessToken", accessToken);
   } catch (error) {
     throw new ApiError(500, "something went wrong in token generation");
   }
@@ -115,4 +114,29 @@ export const userSignin = AsyncHandler(async (req, res) => {
     );
 });
 // logout functionality
-export const userLogout = AsyncHandler(async (req, res) => {});
+export const userLogout = AsyncHandler(async (req, res) => {
+  // get user from req.user
+  // find user in db and remove refresh token
+  // clear cookies
+  // send response
+
+  await User.findByIdAndUpdate(
+    req.user?._id,
+    {
+      $unset: {
+        refreshToken: 1, // remove refresh token from db
+      },
+    },
+    { new: true }
+  );
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json(new ApiResponse(200, {}, "Logout successful"));
+});
