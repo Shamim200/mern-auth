@@ -11,16 +11,20 @@ export const AuthMiddleware = AsyncHandler(async (req, _, next) => {
       req.headers("Authorization")?.replace("Bearer ", "");
 
     if (!token) {
-      return new ApiError(401, "Unauthorized: No token provided");
+      throw new ApiError(401, "Unauthorized request");
     }
     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
-    const user = await User.findById(decodedToken?._id).select(
+    const user = await User.findById(decodedToken.id).select(
       "-password -refreshToken"
     );
+
+    if (!user) {
+      throw new ApiError(401, "Invalid token");
+    }
     req.user = user;
     next();
   } catch (error) {
-    new ApiError(401, error?.message || "Invalid Token");
+    throw new ApiError(500, "something went wrong" || error?.message);
   }
 });
