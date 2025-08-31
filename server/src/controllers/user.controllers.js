@@ -27,6 +27,7 @@ const genarateAccessAndRefreshToken = async (userId) => {
 };
 
 // signup functionality
+
 export const userSignup = AsyncHandler(async (req, res) => {
   // get user details from frontend
   // validation - not empty
@@ -61,7 +62,9 @@ export const userSignup = AsyncHandler(async (req, res) => {
     .status(201)
     .json(new ApiResponse(201, "User created successfully", users));
 });
+
 // signin functionality
+
 export const userSignin = AsyncHandler(async (req, res) => {
   // req body -> data
   // username or email
@@ -113,7 +116,9 @@ export const userSignin = AsyncHandler(async (req, res) => {
       )
     );
 });
+
 // logout functionality
+
 export const userLogout = AsyncHandler(async (req, res) => {
   // get user from req.user
   // find user in db and remove refresh token
