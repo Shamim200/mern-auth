@@ -145,3 +145,12 @@ export const userLogout = AsyncHandler(async (req, res) => {
     .clearCookie("refreshToken", options)
     .json(new ApiResponse(200, {}, "Logout successful"));
 });
+
+// user dashboard
+export const userDashboard = AsyncHandler(async (req, res) => {
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(200, req.user, "User dashboard accessed successfully")
+    );
+});
