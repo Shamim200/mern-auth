@@ -5,7 +5,7 @@ import {
   userSignin,
   userLogout,
   userDashboard,
-  resetPassword,
+  changePassword,
 } from "../controllers/user.controllers.js";
 
 import { upload } from "../middleware/multer.middleware.js";
@@ -17,6 +17,6 @@ router.route("/signup").post(upload.single("avatar"), userSignup);
 router.route("/signin").post(userSignin);
 router.route("/logout").post(AuthMiddleware, userLogout);
 router.route("/dashboard").get(AuthMiddleware, userDashboard); //user dashboard
-router.route("/reset-password").post(AuthMiddleware, resetPassword); //change user password
+router.route("/change-password").post(AuthMiddleware, changePassword); //change user password
 
 export default router;

@@ -155,14 +155,14 @@ export const userDashboard = AsyncHandler(async (req, res) => {
     );
 });
 
-// reset password
-export const resetPassword = AsyncHandler(async (req, res) => {
+// change user password
+export const changePassword = AsyncHandler(async (req, res) => {
   const { oldPassword, newPassword } = req.body;
   const user = await User.findById(req.user._id);
   if (!user) {
     throw new ApiError(404, "User not found");
   }
-  const isCorrectPassword = await user.matchPassword(oldPassword); //
+  const isCorrectPassword = await user.matchPassword(oldPassword);
   if (!isCorrectPassword) {
     throw new ApiError(401, "Old password is incorrect");
   }
