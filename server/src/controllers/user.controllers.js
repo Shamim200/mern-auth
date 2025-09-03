@@ -154,3 +154,21 @@ export const userDashboard = AsyncHandler(async (req, res) => {
       new ApiResponse(200, req.user, "User dashboard accessed successfully")
     );
 });
+
+// reset password
+export const resetPassword = AsyncHandler(async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+  const isCorrectPassword = await user.matchPassword(oldPassword); //
+  if (!isCorrectPassword) {
+    throw new ApiError(401, "Old password is incorrect");
+  }
+  user.password = newPassword;
+  await user.save({ validateBeforeSave: false });
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Password reset successful"));
+});
