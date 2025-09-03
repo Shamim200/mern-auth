@@ -173,7 +173,7 @@ export const changePassword = AsyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "Password reset successful"));
 });
 
-// user name change
+// update user profile
 export const updateUserProfile = AsyncHandler(async (req, res) => {
   const { username, email } = req.body;
   if ([username, email].some((field) => field === "")) {
