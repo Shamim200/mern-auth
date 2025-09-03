@@ -6,6 +6,7 @@ import {
   userLogout,
   userDashboard,
   changePassword,
+  updateUserProfile,
 } from "../controllers/user.controllers.js";
 
 import { upload } from "../middleware/multer.middleware.js";
@@ -18,5 +19,6 @@ router.route("/signin").post(userSignin);
 router.route("/logout").post(AuthMiddleware, userLogout);
 router.route("/dashboard").get(AuthMiddleware, userDashboard); //user dashboard
 router.route("/change-password").post(AuthMiddleware, changePassword); //change user password
+router.route("/update-profile").patch(AuthMiddleware, updateUserProfile); //update user profile
 
 export default router;

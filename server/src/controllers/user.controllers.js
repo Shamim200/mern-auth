@@ -172,3 +172,22 @@ export const changePassword = AsyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, {}, "Password reset successful"));
 });
+
+// user name change
+export const updateUserProfile = AsyncHandler(async (req, res) => {
+  const { username, email } = req.body;
+  if ([username, email].some((field) => field === "")) {
+    throw new ApiError(400, "All fields are required");
+  }
+  await User.findByIdAndUpdate(
+    req.user?._id,
+    {
+      $set: { username, email },
+    },
+    { new: true }
+  ).select("-password");
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Profile updated successfully"));
+});
