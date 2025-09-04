@@ -40,8 +40,8 @@ const userSchema = new Schema(
       max: 20,
     },
     avatar: {
-      type: String,
-      default: "",
+      type: String, // url from cloudinary
+      required: true,
     },
     refreshToken: {
       type: String,
