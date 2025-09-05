@@ -32,8 +32,6 @@ export const userSignup = AsyncHandler(async (req, res) => {
   // get user details from frontend
   // validation - not empty
   // check if user already exists: username, email
-  // check for images, check for avatar
-  // upload them to cloudinary, avatar
   // create user object - create entry in db
   // remove password and refresh token field from response
   // check for user creation
@@ -48,12 +46,17 @@ export const userSignup = AsyncHandler(async (req, res) => {
   if (existingUser) {
     throw new ApiError(409, "User already exists");
   }
+
+  // create user
   const user = await User.create({
     fullname,
     username,
     email,
     password,
+    avatar: `./server/public/temp/${req.file.filename}`,
   });
+  console.log(req.file);
+
   const users = await User.findById(user._id).select("-password -refreshToken");
   if (!users) {
     throw new ApiError(400, "User not found");
