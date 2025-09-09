@@ -3,12 +3,12 @@ const authList = [
   {
     id: 1,
     name: "sign in",
-    links: "/sign-in",
+    links: "/signin",
   },
   {
     id: 2,
     name: "sign up",
-    links: "/sign-up",
+    links: "/signup",
   },
 ];
 const Headers = () => {
