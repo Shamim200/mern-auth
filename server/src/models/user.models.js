@@ -15,7 +15,6 @@ const userSchema = new Schema(
     },
     username: {
       type: String,
-      unique: true,
       trim: true,
       lowercase: true,
       min: [3, "please add at least 3 characters"],
@@ -24,7 +23,7 @@ const userSchema = new Schema(
     email: {
       type: String,
       required: true,
-      unique: true,
+
       trim: true,
       lowercase: true,
       match: [

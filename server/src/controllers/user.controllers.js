@@ -47,15 +47,17 @@ export const userSignup = AsyncHandler(async (req, res) => {
     throw new ApiError(409, "User already exists");
   }
 
+  const avatar = req.file.path;
+  const avatarUrl = `http://localhost:8000/${avatar}`;
+
   // create user
   const user = await User.create({
     fullname,
     username,
     email,
     password,
-    avatar: `./server/public/temp/${req.file.filename}`,
+    avatar: avatarUrl,
   });
-  console.log(req.file);
 
   const users = await User.findById(user._id).select("-password -refreshToken");
   if (!users) {
