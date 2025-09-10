@@ -1,15 +1,18 @@
 import { Suspense, lazy } from "react";
 import { Routes, Route } from "react-router-dom";
+import Loading from "../components/Loading";
 
 const SignIn = lazy(() => import("../pages/SignIn"));
 const SignUp = lazy(() => import("../pages/SignUp"));
+const NotFound = lazy(() => import("../pages/NotFound"));
 
 const Routers = () => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<Loading />}>
       <Routes>
-        <Route path="/sign-in" element={<SignIn />} />
-        <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
   );

@@ -1,18 +1,68 @@
+import { useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { UseAuth } from "../context/Auth";
 
 const SignIn = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { setUser } = UseAuth(); //destructuring
+
+  const handelSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        `/api/v1/users/signin`,
+        {
+          email,
+          password,
+        },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setEmail("");
+      setPassword("");
+
+      if (response.status === 200) {
+        const token = response.data.data?.accessToken;
+        localStorage.setItem("accessToken", token);
+        setUser(response.data.data);
+        alert("user signin successfully");
+      } else {
+        alert("user signin failed");
+      }
+    } catch (error) {
+      console.log("signin error: ", error?.message);
+    }
+  };
+
   return (
     <Container>
-      <Form>
+      <Form onSubmit={handelSubmit}>
         <h4 className="text-capitalize text-center mt-5">user sign in form</h4>
         <Form.Group className="mb-3">
           <Form.Label>Email</Form.Label>
-          <Form.Control type="email" required />
+          <Form.Control
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            type="email"
+            required
+          />
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Password</Form.Label>
-          <Form.Control type="password" required />
+          <Form.Control
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            type="password"
+            required
+          />
         </Form.Group>
         <Link
           className="text-decoration-none text-primary"
