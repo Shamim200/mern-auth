@@ -12,6 +12,9 @@ lerna-debug.log*
 # Diagnostic reports (https://nodejs.org/api/report.html)
 .report/
 
+# upload images
+./server/public/temp
+
 # Node.js
 # Attention: If you're using the clean-webpack-plugin, remove this section.
 node_modules/
