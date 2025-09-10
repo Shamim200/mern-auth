@@ -1,4 +1,6 @@
-import { Navbar, Nav, Container } from "react-bootstrap";
+import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
+import { UseAuth } from "../context/Auth";
+import { NavLink } from "react-router-dom";
 const authList = [
   {
     id: 1,
@@ -12,24 +14,45 @@ const authList = [
   },
 ];
 const Headers = () => {
+  const { user, userLogout } = UseAuth();
   return (
     <Navbar expand="sm" variant="light" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand href="#home">
+        <Navbar.Brand>
           <img src="./vite.svg" alt="" />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto text-capitalize">
-            {authList.map((item) => {
-              const { id, name, links } = item;
+            {user && (
+              <NavDropdown
+                title={user.user?.fullname}
+                className="text-capitalize"
+                id="nav-dropdown"
+              >
+                <NavDropdown.Item className="text-capitalize">
+                  <NavLink to="/dashboard" className="text-decoration-none">
+                    Dashboard
+                  </NavLink>
+                </NavDropdown.Item>
+                <NavDropdown.Item
+                  className="text-capitalize"
+                  onClick={userLogout}
+                >
+                  log out
+                </NavDropdown.Item>
+              </NavDropdown>
+            )}
+            {!user &&
+              authList.map((item) => {
+                const { id, name, links } = item;
 
-              return (
-                <Nav.Link href={links} key={id}>
-                  {name}
-                </Nav.Link>
-              );
-            })}
+                return (
+                  <Nav.Link href={links} key={id}>
+                    {name}
+                  </Nav.Link>
+                );
+              })}
           </Nav>
         </Navbar.Collapse>
       </Container>
