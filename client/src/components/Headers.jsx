@@ -13,7 +13,7 @@ const authList = [
 ];
 const Headers = () => {
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar expand="sm" variant="light" className="bg-body-tertiary">
       <Container>
         <Navbar.Brand href="#home">
           <img src="./vite.svg" alt="" />
