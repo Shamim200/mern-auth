@@ -7,7 +7,15 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {}, []);
 
-  const userLogout = async () => {};
+  const userLogout = async () => {
+    await fetch("", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({}),
+    });
+  };
 
   return (
     <AuthContext.Provider value={{ user, setUser, userLogout }}>
