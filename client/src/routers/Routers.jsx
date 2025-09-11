@@ -1,6 +1,7 @@
 import { Suspense, lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 import Loading from "../components/Loading";
+import Protect from "./Protect";
 
 const SignIn = lazy(() => import("../pages/SignIn"));
 const SignUp = lazy(() => import("../pages/SignUp"));
@@ -13,7 +14,14 @@ const Routers = () => {
       <Routes>
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route
+          path="/dashboard"
+          element={
+            <Protect>
+              <Dashboard />
+            </Protect>
+          }
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
