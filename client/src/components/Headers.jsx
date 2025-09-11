@@ -27,14 +27,23 @@ const Headers = () => {
           <Nav className="ms-auto text-capitalize">
             {user && (
               <NavDropdown
-                title={user.username}
+                title={user.username || user.user?.username}
                 className="text-capitalize"
                 id="nav-dropdown"
               >
-                <NavDropdown.Item className="text-capitalize">
-                  <NavLink to="/dashboard" className="text-decoration-none">
-                    Dashboard
-                  </NavLink>
+                <NavDropdown.Item
+                  as={NavLink}
+                  to="/dashboard"
+                  className="text-capitalize text-decoration-none"
+                >
+                  Dashboard
+                </NavDropdown.Item>
+                <NavDropdown.Item
+                  as={NavLink}
+                  className="text-capitalize text-decoration-none"
+                  to="/change-password"
+                >
+                  Change Password
                 </NavDropdown.Item>
                 <NavDropdown.Item
                   className="text-capitalize"
