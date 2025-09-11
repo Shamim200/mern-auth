@@ -7,6 +7,7 @@ const SignIn = lazy(() => import("../pages/SignIn"));
 const SignUp = lazy(() => import("../pages/SignUp"));
 const Dashboard = lazy(() => import("../pages/Dashboard"));
 const NotFound = lazy(() => import("../pages/NotFound"));
+const ChangePassword = lazy(() => import("../pages/ChangePassword"));
 
 const Routers = () => {
   return (
@@ -19,6 +20,14 @@ const Routers = () => {
           element={
             <Protect>
               <Dashboard />
+            </Protect>
+          }
+        />
+        <Route
+          path="/change-password"
+          element={
+            <Protect>
+              <ChangePassword />
             </Protect>
           }
         />
