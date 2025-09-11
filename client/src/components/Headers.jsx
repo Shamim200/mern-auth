@@ -15,6 +15,7 @@ const authList = [
 ];
 const Headers = () => {
   const { user, userLogout } = UseAuth();
+
   return (
     <Navbar expand="sm" variant="light" className="bg-body-tertiary">
       <Container>
@@ -26,7 +27,7 @@ const Headers = () => {
           <Nav className="ms-auto text-capitalize">
             {user && (
               <NavDropdown
-                title={user.user?.fullname}
+                title={user.username}
                 className="text-capitalize"
                 id="nav-dropdown"
               >
