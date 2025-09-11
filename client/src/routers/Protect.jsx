@@ -2,7 +2,9 @@ import { UseAuth } from "../context/Auth";
 import { Navigate } from "react-router-dom";
 const Protect = ({ children }) => {
   const { user } = UseAuth();
-
-  user ? children : <Navigate to="/login" />;
+  if (!user) {
+    return <Navigate to="/signin" />;
+  }
+  return children;
 };
 export default Protect;
