@@ -27,13 +27,9 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const userLogout = async () => {
-    await fetch("/api/v1/users/logout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({}),
-    });
+    await axios.post("/api/v1/users/logout");
+    localStorage.removeItem("accessToken");
+    setUser(null);
   };
 
   return (
