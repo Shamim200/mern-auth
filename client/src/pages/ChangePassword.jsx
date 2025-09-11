@@ -38,7 +38,9 @@ const ChangePassword = () => {
   return (
     <Container>
       <Form onSubmit={handelSubmit}>
-        <h4 className="text-capitalize text-center mt-5">user sign in form</h4>
+        <h4 className="text-capitalize text-center mt-5">
+          change user password
+        </h4>
         <Form.Group className="mb-3">
           <Form.Label>Old Password</Form.Label>
           <Form.Control
