@@ -46,6 +46,13 @@ const Headers = () => {
                   Change Password
                 </NavDropdown.Item>
                 <NavDropdown.Item
+                  as={NavLink}
+                  className="text-capitalize text-decoration-none"
+                  to="/update-profile"
+                >
+                  Update Profile
+                </NavDropdown.Item>
+                <NavDropdown.Item
                   className="text-capitalize"
                   onClick={userLogout}
                 >

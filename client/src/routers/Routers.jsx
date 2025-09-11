@@ -8,6 +8,7 @@ const SignUp = lazy(() => import("../pages/SignUp"));
 const Dashboard = lazy(() => import("../pages/Dashboard"));
 const NotFound = lazy(() => import("../pages/NotFound"));
 const ChangePassword = lazy(() => import("../pages/ChangePassword"));
+const UpdateProfile = lazy(() => import("../pages/UpdateProfile"));
 
 const Routers = () => {
   return (
@@ -28,6 +29,14 @@ const Routers = () => {
           element={
             <Protect>
               <ChangePassword />
+            </Protect>
+          }
+        />
+        <Route
+          path="/update-profile"
+          element={
+            <Protect>
+              <UpdateProfile />
             </Protect>
           }
         />

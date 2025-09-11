@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import { UseAuth } from "../context/Auth";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [redirect, setRedirect] = useState(false);
 
   const { setUser } = UseAuth(); //destructuring
 
@@ -34,6 +35,7 @@ const SignIn = () => {
         localStorage.setItem("accessToken", token);
         setUser(response.data.data);
         alert("user signin successfully");
+        setRedirect(true);
       } else {
         alert("user signin failed");
       }
@@ -41,6 +43,10 @@ const SignIn = () => {
       console.log("signin error: ", error?.message);
     }
   };
+
+  if (redirect) {
+    return <Navigate to="/dashboard" />;
+  }
 
   return (
     <Container>
