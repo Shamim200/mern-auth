@@ -9,6 +9,7 @@ const Dashboard = lazy(() => import("../pages/Dashboard"));
 const NotFound = lazy(() => import("../pages/NotFound"));
 const ChangePassword = lazy(() => import("../pages/ChangePassword"));
 const UpdateProfile = lazy(() => import("../pages/UpdateProfile"));
+const ForgotPassword = lazy(() => import("../pages/ForgotPassword"));
 
 const Routers = () => {
   return (
@@ -16,6 +17,7 @@ const Routers = () => {
       <Routes>
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route
           path="/dashboard"
           element={
