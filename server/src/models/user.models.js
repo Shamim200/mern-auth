@@ -30,7 +30,6 @@ const userSchema = new Schema(
         /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
         "Please add a valid email",
       ],
-      max: 50,
     },
     password: {
       type: String,
