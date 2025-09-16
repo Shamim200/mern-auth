@@ -2,6 +2,8 @@ import { useState, useRef } from "react";
 import { Container, Form, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { SignUpSchema } from "../validation/index";
+import { Formik } from "formik";
 
 const SignUp = () => {
   const [fullname, setFullname] = useState("");
@@ -45,7 +47,7 @@ const SignUp = () => {
 
   return (
     <Container>
-      <Form method="POST" onSubmit={handelSubmit}>
+      <Form method="POST" onSubmit={handelSubmit} className="my-5">
         <h4 className="text-center mt-5 text-capitalize">user sign up form</h4>
         <Form.Group className="mb-3">
           <Form.Label className="text-capitalize">full name</Form.Label>
@@ -98,7 +100,7 @@ const SignUp = () => {
 
         <p className="text-capitalize">
           all ready have an account?{" "}
-          <Link className="text-decoration-none text-success" to="/sign-in">
+          <Link className="text-decoration-none text-success" to="/signin">
             Sign In
           </Link>
         </p>
