@@ -78,7 +78,7 @@ const SignIn = () => {
         </Link>
         <p className="text-capitalize mt-3">
           create an account?{" "}
-          <Link className="text-decoration-none text-success" to="/sign-up">
+          <Link className="text-decoration-none text-success" to="/signup">
             Sign Up
           </Link>
         </p>
