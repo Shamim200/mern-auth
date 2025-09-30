@@ -15,6 +15,7 @@ const Routers = () => {
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
+        <Route path="/" element={<SignUp />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
