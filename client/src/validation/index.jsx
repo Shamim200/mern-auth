@@ -1,8 +1,8 @@
 import * as Yup from "yup";
 
 export const SignUpSchema = Yup.object({
-  fullname: Yup.string().min(3).max(20).required("Please enter your name"),
-  username: Yup.string().min(2).max(20).required("Please enter your name"),
+  fullname: Yup.string().min(3).max(20).required("Please enter your full name"),
+  username: Yup.string().min(2).max(20).required("Please enter your user name"),
   email: Yup.string().email().required("Please enter your email"),
   password: Yup.string().min(8).required("Please enter your password"),
 });
