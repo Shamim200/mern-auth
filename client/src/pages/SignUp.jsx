@@ -1,101 +1,143 @@
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import { Container, Form, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { SignUpSchema } from "../validation/index";
-import { Formik } from "formik";
+import { useFormik } from "formik";
+import { SignUpSchema } from "../validation";
 
 const SignUp = () => {
-  const [fullname, setFullname] = useState("");
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [avatar, setAvatar] = useState(null);
   const fileInputRef = useRef(null); // Add a ref for the file input
 
-  const handelSubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
+  const {
+    errors,
+    values,
+    handleChange,
+    handleSubmit,
+    setFieldValue,
+    touched,
+    handleBlur,
+  } = useFormik({
+    initialValues: {
+      fullname: "",
+      username: "",
+      email: "",
+      password: "",
+      avatar: null,
+    },
 
-    formData.append("fullname", fullname);
-    formData.append("username", username);
-    formData.append("email", email);
-    formData.append("password", password);
-    formData.append("avatar", avatar);
+    validationSchema: SignUpSchema,
 
-    try {
-      const response = await axios.post("/api/v1/users/signup", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      setFullname("");
-      setUsername("");
-      setEmail("");
-      setPassword("");
-      setAvatar(null);
+    onSubmit: async (values, { resetForm }) => {
+      resetForm({ values: "" });
 
       if (fileInputRef.current) {
-        fileInputRef.current.value = ""; // Clear the file input
+        fileInputRef.current.value = ""; // Clear the file input value
       }
 
-      console.log(response);
-    } catch (error) {
-      console.log("Signup error: ", error?.message);
-    }
-  };
+      const formData = new FormData();
+      formData.append("fullname", values.fullname);
+      formData.append("username", values.username);
+      formData.append("email", values.email);
+      formData.append("password", values.password);
+      formData.append("avatar", values.avatar);
+
+      try {
+        const response = await axios.post("/api/v1/users/signup", formData);
+
+        if (response.status === 201) {
+          alert("Sign Up successfully✅");
+        } else {
+          alert("Sign Up failed❌");
+        }
+      } catch (error) {
+        console.log("Signup error: ", error?.message);
+      }
+    },
+  });
 
   return (
     <Container>
-      <Form method="POST" onSubmit={handelSubmit} className="my-5">
+      <Form method="POST" onSubmit={handleSubmit} className="my-5">
         <h4 className="text-center mt-5 text-capitalize">user sign up form</h4>
         <Form.Group className="mb-3">
           <Form.Label className="text-capitalize">full name</Form.Label>
           <Form.Control
-            value={fullname}
-            onChange={(e) => setFullname(e.target.value)}
+            name="fullname"
+            id="fullname"
+            value={values.fullname}
+            onBlur={handleBlur}
+            onChange={handleChange}
             type="text"
             required
           />
+          {touched.fullname && errors.fullname && (
+            <p className="text-danger my-2">{errors.fullname}</p>
+          )}
         </Form.Group>
 
         <Form.Group className="mb-3">
           <Form.Label className="text-capitalize">user name</Form.Label>
           <Form.Control
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            name="username"
+            id="username"
+            value={values.username}
+            onBlur={handleBlur}
+            onChange={handleChange}
             type="text"
             required
           />
+          {touched.fullname && errors.username && (
+            <p className="text-danger my-2">{errors.username}</p>
+          )}
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="basicEmail">
+        <Form.Group className="mb-3">
           <Form.Label className="text-capitalize">Email</Form.Label>
           <Form.Control
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            id="email"
+            value={values.email}
+            onBlur={handleBlur}
+            onChange={handleChange}
             type="email"
             required
           />
+          {touched.email && errors.email && (
+            <p className="text-danger my-2">{errors.email}</p>
+          )}
         </Form.Group>
-        <Form.Group className="mb-3" controlId="basicPassword">
+        <Form.Group className="mb-3">
           <Form.Label className="text-capitalize">password</Form.Label>
           <Form.Control
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            name="password"
+            id="password"
+            value={values.password}
+            onBlur={handleBlur}
+            onChange={handleChange}
             type="password"
             required
           />
+          {touched.password && errors.password && (
+            <p className="text-danger my-2">{errors.password}</p>
+          )}
         </Form.Group>
 
         {/* upload file */}
 
-        <Form.Group controlId="formFile" className="mb-3">
+        <Form.Group className="mb-3">
           <Form.Control
-            onChange={(e) => setAvatar(e.target.files[0])}
+            name="avatar"
+            id="avatar"
+            value={values.avatar}
             ref={fileInputRef}
+            onChange={(event) => {
+              setFieldValue("avatar", event.target?.avatar[0]);
+            }}
             type="file"
           />
+          {touched.avatar && errors.avatar && (
+            <p className="text-danger my-2">{errors.avatar}</p>
+          )}
         </Form.Group>
 
         <p className="text-capitalize">

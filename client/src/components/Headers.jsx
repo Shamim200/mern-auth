@@ -1,6 +1,8 @@
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { UseAuth } from "../context/Auth";
 import { NavLink } from "react-router-dom";
+import DarkMode from "./DarkMode";
+
 const authList = [
   {
     id: 1,
@@ -17,7 +19,12 @@ const Headers = () => {
   const { user, userLogout } = UseAuth();
 
   return (
-    <Navbar expand="sm" variant="light" className="bg-body-tertiary">
+    <Navbar
+      expand="sm"
+      bg="dark"
+      data-bs-theme="dark"
+      className="bg-body-tertiary"
+    >
       <Container>
         <Navbar.Brand>
           <img src="./vite.svg" alt="" />
@@ -27,8 +34,18 @@ const Headers = () => {
           <Nav className="ms-auto text-capitalize">
             {user && (
               <NavDropdown
-                title={user.username || user.user?.username}
-                className="text-capitalize"
+                title={
+                  <img
+                    src={`${"public/vite.svg"}`}
+                    alt="avatar"
+                    style={{
+                      width: "30px",
+                      height: "30px",
+                      borderRadius: "50%",
+                      marginRight: "8px",
+                    }}
+                  />
+                }
                 id="nav-dropdown"
               >
                 <NavDropdown.Item
@@ -71,6 +88,7 @@ const Headers = () => {
                 );
               })}
           </Nav>
+          <DarkMode />
         </Navbar.Collapse>
       </Container>
     </Navbar>

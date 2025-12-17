@@ -1,3 +1,22 @@
 body {
   font-family: ubuntu !important;
 }
+/* Theme */
+.light-theme {
+  color: #000;
+  background-color: #fff;
+  transition: all linear 0.8s;
+  --dark-icon-color: #000;
+}
+.dark-theme {
+  color: #fff;
+  background: #1d1c19;
+  transition: all linear 0.8s;
+  --dark-icon-color: #fff;
+}
+.dark-icon {
+  cursor: pointer;
+  font-size: 1.3rem;
+  color: #000;
+  color: #ddd;
+}
