@@ -1,6 +1,6 @@
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { UseAuth } from "../context/Auth";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import DarkMode from "./DarkMode";
 
 const authList = [
@@ -82,7 +82,7 @@ const Headers = () => {
                 const { id, name, links } = item;
 
                 return (
-                  <Nav.Link href={links} key={id}>
+                  <Nav.Link as={Link} to={links} key={id}>
                     {name}
                   </Nav.Link>
                 );
