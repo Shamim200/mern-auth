@@ -42,20 +42,18 @@ const ChangePassword = () => {
           change user password
         </h4>
         <Form.Group className="mb-3">
-          <Form.Label>Old Password</Form.Label>
           <Form.Control
             value={oldPassword}
-            placeholder="Enter old password"
+            placeholder="Current Password"
             onChange={(e) => setOldPassword(e.target.value)}
             type="password"
             required
           />
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Label>New Password</Form.Label>
           <Form.Control
             value={newPassword}
-            placeholder="Enter new password"
+            placeholder="New Password"
             onChange={(e) => setNewPassword(e.target.value)}
             type="password"
             required
@@ -63,7 +61,7 @@ const ChangePassword = () => {
         </Form.Group>
 
         <Button variant="outline-success" type="submit">
-          Update Password
+          Submit
         </Button>
       </Form>
     </Container>
