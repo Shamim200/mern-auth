@@ -1,11 +1,13 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
+
 import { useFormik } from "formik";
 import { SignUpSchema } from "../validation";
 
 const SignUp = () => {
+  const [redirect, setRedirect] = useState(false);
   const fileInputRef = useRef(null); // Add a ref for the file input
 
   const {
@@ -34,17 +36,18 @@ const SignUp = () => {
         fileInputRef.current.value = ""; // Clear the file input value
       }
 
-      const formData = new FormData();
-      formData.append("fullname", values.fullname);
-      formData.append("username", values.username);
-      formData.append("email", values.email);
-      formData.append("password", values.password);
-      formData.append("avatar", values.avatar);
-
       try {
-        const response = await axios.post("/api/v1/users/signup", formData);
-
-        if (response.status === 201) {
+        const res = await axios.post(
+          "/api/v1/users/signup",
+          { ...values },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (res.status === 201) {
+          setRedirect(true);
           alert("Sign Up successfully✅");
         } else {
           alert("Sign Up failed❌");
@@ -55,18 +58,22 @@ const SignUp = () => {
     },
   });
 
+  if (redirect) {
+    return <Navigate to="/signin" />;
+  }
+
   return (
     <Container>
       <Form method="POST" onSubmit={handleSubmit} className="my-5">
         <h4 className="text-center mt-5 text-capitalize">user sign up form</h4>
         <Form.Group className="mb-3">
-          <Form.Label className="text-capitalize">full name</Form.Label>
           <Form.Control
             name="fullname"
             id="fullname"
             value={values.fullname}
             onBlur={handleBlur}
             onChange={handleChange}
+            placeholder="Full Name"
             type="text"
             required
           />
@@ -76,13 +83,13 @@ const SignUp = () => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label className="text-capitalize">user name</Form.Label>
           <Form.Control
             name="username"
             id="username"
             value={values.username}
             onBlur={handleBlur}
             onChange={handleChange}
+            placeholder="User Name"
             type="text"
             required
           />
@@ -92,13 +99,13 @@ const SignUp = () => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label className="text-capitalize">Email</Form.Label>
           <Form.Control
             name="email"
             id="email"
             value={values.email}
             onBlur={handleBlur}
             onChange={handleChange}
+            placeholder="Email"
             type="email"
             required
           />
@@ -107,13 +114,13 @@ const SignUp = () => {
           )}
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Label className="text-capitalize">password</Form.Label>
           <Form.Control
             name="password"
             id="password"
             value={values.password}
             onBlur={handleBlur}
             onChange={handleChange}
+            placeholder="Password"
             type="password"
             required
           />
