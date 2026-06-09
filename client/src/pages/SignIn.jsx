@@ -9,7 +9,7 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
 
-  const { setUser } = UseAuth(); //destructuring
+  const { setUser } = UseAuth(); // destructuring
 
   const handelSubmit = async (e) => {
     e.preventDefault();
@@ -29,7 +29,6 @@ const SignIn = () => {
       );
       setEmail("");
       setPassword("");
-
       if (response.status === 200) {
         const token = response.data.data?.accessToken;
         localStorage.setItem("accessToken", token);
@@ -53,20 +52,20 @@ const SignIn = () => {
       <Form onSubmit={handelSubmit}>
         <h4 className="text-capitalize text-center mt-5">user sign in form</h4>
         <Form.Group className="mb-3">
-          <Form.Label>Email</Form.Label>
           <Form.Control
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             type="email"
+            placeholder="Email"
             required
           />
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Label>Password</Form.Label>
           <Form.Control
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             type="password"
+            placeholder="Password"
             required
           />
         </Form.Group>
