@@ -15,35 +15,19 @@ const Routers = () => {
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
+        {/* public route */}
         <Route path="/" element={<Navigate to="/signup" />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route
-          path="/dashboard"
-          element={
-            <Protect>
-              <Dashboard />
-            </Protect>
-          }
-        />
-        <Route
-          path="/change-password"
-          element={
-            <Protect>
-              <ChangePassword />
-            </Protect>
-          }
-        />
-        <Route
-          path="/update-profile"
-          element={
-            <Protect>
-              <UpdateProfile />
-            </Protect>
-          }
-        />
         <Route path="*" element={<NotFound />} />
+
+        {/* private route */}
+        <Route element={<Protect />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/change-password" element={<ChangePassword />} />
+          <Route path="/update-profile" element={<UpdateProfile />} />
+        </Route>
       </Routes>
     </Suspense>
   );
