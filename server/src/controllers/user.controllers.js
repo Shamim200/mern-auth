@@ -47,8 +47,8 @@ export const userSignup = AsyncHandler(async (req, res) => {
     throw new ApiError(409, "User already exists");
   }
 
-  const avatar = req.file.path;
-  const avatarUrl = `http://localhost:8000/${avatar}`;
+  // const avatar = req.file.path;
+  // const avatarUrl = `http://localhost:8000/${avatar}`;
 
   // create user
   const user = await User.create({
@@ -56,7 +56,7 @@ export const userSignup = AsyncHandler(async (req, res) => {
     username,
     email,
     password,
-    avatar: avatarUrl,
+    // avatar: avatarUrl,
   });
 
   const users = await User.findById(user._id).select("-password -refreshToken");
@@ -195,4 +195,13 @@ export const updateUserProfile = AsyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(new ApiResponse(200, {}, "Profile updated successfully"));
+});
+
+// refresh access token or generate new token
+export const refreshAccessToken = AsyncHandler(async (req, res) => {});
+// forgot password
+export const forgotPassword = AsyncHandler(async (req, res) => {
+  const { email } = req.body;
+  const existsUser = await User.find({ email });
+  // console.log(existsUser);
 });
