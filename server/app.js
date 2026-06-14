@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-// import path from "path";
 import cookieParser from "cookie-parser";
 import userRouter from "./src/routes/user.routes.js";
 import dotenv from "dotenv";
@@ -23,8 +22,8 @@ app.use(
   })
 );
 app.use(express.urlencoded({ extended: true, limit: "100kb" }));
-app.use(express.static("public"));
-// app.use(express.static(path.join(path.resolve(), "public")));
+app.use(express.static("./server/public/temp"));
+
 app.use(cookieParser());
 
 // routes
