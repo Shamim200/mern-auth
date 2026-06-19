@@ -2,6 +2,7 @@ import AsyncHandler from "../utils/AsyncHandler.js";
 import User from "../models/user.models.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import jwt from "jsonwebtoken";
 
 // genarate access & refresh token
 
@@ -198,7 +199,48 @@ export const updateUserProfile = AsyncHandler(async (req, res) => {
 });
 
 // refresh access token or generate new token
-export const refreshAccessToken = AsyncHandler(async (req, res) => {});
+export const refreshAccessToken = AsyncHandler(async (req, res) => {
+  const incomingRefreshToken =
+    req.cookies?.refreshToken || req.body?.refreshToken;
+  if (!incomingRefreshToken) {
+    throw new ApiError(401, "unauthrorized token");
+  }
+  try {
+    const decodedToken = jwt.verify(
+      incomingRefreshToken,
+      process.env.REFRESH_TOKEN_SECRET
+    );
+    if (!decodedToken) {
+      throw new ApiError(401, "invalid refresh token");
+    }
+    const user = await User.findById(decodedToken?._id);
+
+    if (!user) {
+      throw new ApiError(401, "Refresh Token date expire or used");
+    }
+
+    const options = {
+      secure: true,
+      httpOnly: true,
+    };
+    const { accessToken, newRefreshToken } =
+      await genarateAccessAndRefreshToken();
+
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", newRefreshToken, options)
+      .json(
+        new ApiResponse(
+          200,
+          { accessToken, refreshToken: newRefreshToken },
+          "access token refreshed"
+        )
+      );
+  } catch (error) {
+    throw new ApiError(500, error?.message);
+  }
+});
 // forgot password
 export const forgotPassword = AsyncHandler(async (req, res) => {
   const { email } = req.body;
