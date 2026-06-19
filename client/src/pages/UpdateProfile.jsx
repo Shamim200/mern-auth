@@ -46,6 +46,7 @@ const UpdateProfile = () => {
             onChange={(e) => setEmail(e.target.value)}
             type="email"
             placeholder="Email"
+            required
           />
         </Form.Group>
 
