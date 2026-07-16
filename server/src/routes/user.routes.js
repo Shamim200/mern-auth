@@ -13,11 +13,25 @@ import {
 
 import { upload } from "../middleware/multer.middleware.js";
 import { AuthMiddleware } from "../middleware/auth.middleware.js";
+import {
+  userSignInValidation,
+  userSignUpValidation,
+  validationErrors,
+} from "../validations/validate.js";
 
 const router = Router();
 
-router.route("/signup").post(upload.single("avatar"), userSignup);
-router.route("/signin").post(userSignin);
+router
+  .route("/signup")
+  .post(
+    upload.single("avatar"),
+    userSignUpValidation,
+    validationErrors,
+    userSignup
+  );
+router
+  .route("/signin")
+  .post(userSignInValidation, validationErrors, userSignin);
 router.route("/logout").post(AuthMiddleware, userLogout);
 router.route("/dashboard").get(AuthMiddleware, userDashboard); //user dashboard
 router.route("/change-password").post(AuthMiddleware, changePassword); //change user password
