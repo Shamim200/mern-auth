@@ -3,6 +3,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRouter from "./src/routes/user.routes.js";
 import dotenv from "dotenv";
+import helmet from "helmet";
 const app = express();
 
 dotenv.config({
@@ -10,6 +11,12 @@ dotenv.config({
 });
 
 // use middlewares
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    xDownloadOptions: false,
+  })
+);
 app.use(
   cors({
     origin: process.env.cors,
