@@ -2,11 +2,15 @@ import { useRef, useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
 import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 import { useFormik } from "formik";
 import { SignUpSchema } from "../validation";
+import { useTransition } from "react";
+import Loader from "../components/Loader";
 
 const SignUp = () => {
+  const [isPending, startTransition] = useTransition();
   const [redirect, setRedirect] = useState(false);
   const fileInputRef = useRef(null); // Add a ref for the file input
 
@@ -36,25 +40,30 @@ const SignUp = () => {
         fileInputRef.current.value = ""; // Clear the file input value
       }
 
-      try {
-        const res = await axios.post(
-          "/api/v1/users/signup",
-          { ...values },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
+      startTransition(async () => {
+        try {
+          const res = await axios.post(
+            "/api/v1/users/signup",
+            { ...values },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          if (res.status === 201) {
+            setRedirect(true);
+
+            toast.success("Sign Up successfully✅");
+          } else if (res.status === 409) {
+            toast.error("User already exists❌");
+          } else {
+            toast.error("Sign Up failed❌");
           }
-        );
-        if (res.status === 201) {
-          setRedirect(true);
-          alert("Sign Up successfully✅");
-        } else {
-          alert("Sign Up failed❌");
+        } catch (error) {
+          console.log("Signup error: ", error?.message);
         }
-      } catch (error) {
-        console.log("Signup error: ", error?.message);
-      }
+      });
     },
   });
 
@@ -154,7 +163,7 @@ const SignUp = () => {
           </Link>
         </p>
         <Button variant="outline-primary" type="submit">
-          Sign Up
+          {isPending ? <Loader /> : "Sign Up"}
         </Button>
       </Form>
     </Container>
