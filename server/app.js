@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import userRouter from "./src/routes/user.routes.js";
 import dotenv from "dotenv";
 import helmet from "helmet";
+import { globalRateLimitConfig } from "./src/config/rateLimitConfig.js";
 const app = express();
 
 dotenv.config({
@@ -17,6 +18,7 @@ app.use(
     xDownloadOptions: false,
   })
 );
+app.use(globalRateLimitConfig);
 app.use(
   cors({
     origin: process.env.cors,
