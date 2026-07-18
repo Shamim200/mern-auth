@@ -1,14 +1,16 @@
 import { useState } from "react";
-import { Container, Form, Button } from "react-bootstrap";
+import { Container, Form, Button, InputGroup } from "react-bootstrap";
 import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import { UseAuth } from "../context/Auth";
 import { toast } from "react-toastify";
 import { useTransition } from "react";
 import Loader from "../components/Loader";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const SignIn = () => {
   const [ispending, startTransition] = useTransition();
+  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
@@ -70,13 +72,21 @@ const SignIn = () => {
           />
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Control
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            type="password"
-            placeholder="Password"
-            required
-          />
+          <InputGroup>
+            <Form.Control
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              type={showPassword ? "password" : "text"}
+              placeholder="Password"
+              required
+            />
+            <Button
+              onClick={() => setShowPassword(!showPassword)}
+              style={{ zIndex: 0 }} // Bootstrap-এর ফোকাস বর্ডার ওভারল্যাপ ঠিক রাখতে
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </Button>
+          </InputGroup>
         </Form.Group>
         <Link
           className="text-decoration-none text-primary"

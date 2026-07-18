@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Container, Form, Button } from "react-bootstrap";
+import { Container, Form, Button, InputGroup } from "react-bootstrap";
 import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -8,9 +8,11 @@ import { useFormik } from "formik";
 import { SignUpSchema } from "../validation";
 import { useTransition } from "react";
 import Loader from "../components/Loader";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const SignUp = () => {
   const [isPending, startTransition] = useTransition();
+  const [showPassword, setShowPassword] = useState(false);
   const [redirect, setRedirect] = useState(false);
   const fileInputRef = useRef(null); // Add a ref for the file input
 
@@ -123,16 +125,24 @@ const SignUp = () => {
           )}
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Control
-            name="password"
-            id="password"
-            value={values.password}
-            onBlur={handleBlur}
-            onChange={handleChange}
-            placeholder="Password"
-            type="password"
-            required
-          />
+          <InputGroup>
+            <Form.Control
+              name="password"
+              id="password"
+              value={values.password}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              placeholder="Password"
+              type={showPassword ? "password" : "text"}
+              required
+            />
+            <Button
+              onClick={() => setShowPassword(!showPassword)}
+              style={{ zIndex: 0 }}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </Button>
+          </InputGroup>
           {touched.password && errors.password && (
             <p className="text-danger my-2">{errors.password}</p>
           )}
