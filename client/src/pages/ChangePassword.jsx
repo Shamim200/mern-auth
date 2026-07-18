@@ -1,39 +1,43 @@
-import { useState } from "react";
-import { Container, Form, Button } from "react-bootstrap";
-
+import { useState, useTransition } from "react";
 import axios from "axios";
+import { Container, Form, Button } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 const ChangePassword = () => {
+  const [ispending, startTransition] = useTransition();
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
   const handelSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post(
-        "/api/v1/users/change-password",
-        {
-          oldPassword,
-          newPassword,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
+    startTransition(async () => {
+      try {
+        const response = await axios.post(
+          "/api/v1/users/change-password",
+          {
+            oldPassword,
+            newPassword,
           },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        setOldPassword("");
+        setNewPassword("");
+
+        if (response.status === 200) {
+          toast.success("Password changed successfully");
+        } else {
+          toast.error("Something went wrong");
         }
-      );
-
-      setOldPassword("");
-      setNewPassword("");
-
-      if (response.status === 200) {
-        alert("password changed successfully");
-      } else {
-        alert("something went wrong");
+      } catch (error) {
+        console.log("Change password error: ", error?.message);
+        toast.error("Something went wrong");
       }
-    } catch (error) {
-      console.log("chagne password error: ", error?.message);
-    }
+    });
   };
   return (
     <Container>
@@ -53,15 +57,15 @@ const ChangePassword = () => {
         <Form.Group className="mb-3">
           <Form.Control
             value={newPassword}
-            placeholder="New Password"
             onChange={(e) => setNewPassword(e.target.value)}
+            placeholder="New Password"
             type="password"
             required
           />
         </Form.Group>
 
-        <Button variant="outline-success" type="submit">
-          Submit
+        <Button variant="outline-success" type="submit" ispending={ispending}>
+          {ispending ? <Loader /> : "submit"}
         </Button>
       </Form>
     </Container>
