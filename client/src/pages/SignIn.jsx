@@ -3,8 +3,12 @@ import { Container, Form, Button } from "react-bootstrap";
 import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import { UseAuth } from "../context/Auth";
+import { toast } from "react-toastify";
+import { useTransition } from "react";
+import Loader from "../components/Loader";
 
 const SignIn = () => {
+  const [ispending, startTransition] = useTransition();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
@@ -13,34 +17,39 @@ const SignIn = () => {
 
   const handelSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post(
-        `/api/v1/users/signin`,
-        {
-          email,
-          password,
-        },
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
+
+    startTransition(async () => {
+      try {
+        const response = await axios.post(
+          `/api/v1/users/signin`,
+          {
+            email,
+            password,
           },
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        setEmail("");
+        setPassword("");
+        if (response.status === 200) {
+          const token = response.data.data?.accessToken;
+          localStorage.setItem("accessToken", token);
+          setUser(response.data.data);
+          toast.success("user signin successfully");
+          setRedirect(true);
+        } else if (response.status === 401) {
+          toast.error("Unauthorized: Invalid credentials❌");
+        } else {
+          toast.error("user signin failed");
         }
-      );
-      setEmail("");
-      setPassword("");
-      if (response.status === 200) {
-        const token = response.data.data?.accessToken;
-        localStorage.setItem("accessToken", token);
-        setUser(response.data.data);
-        alert("user signin successfully");
-        setRedirect(true);
-      } else {
-        alert("user signin failed");
+      } catch (error) {
+        console.log("signin error: ", error?.message);
       }
-    } catch (error) {
-      console.log("signin error: ", error?.message);
-    }
+    });
   };
 
   if (redirect) {
@@ -81,8 +90,8 @@ const SignIn = () => {
             Sign Up
           </Link>
         </p>
-        <Button variant="outline-success" type="submit">
-          Sign In
+        <Button variant="outline-success" type="submit" ispending={ispending}>
+          {ispending ? <Loader /> : "Sign In"}
         </Button>
       </Form>
     </Container>
