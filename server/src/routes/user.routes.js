@@ -17,7 +17,7 @@ import {
   userSignInValidation,
   userSignUpValidation,
   validationErrors,
-} from "../validations/validate.js";
+} from "../middleware/validations/auth.validation.js";
 
 const router = Router();
 
