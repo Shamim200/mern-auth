@@ -2,6 +2,7 @@ import { useState, useTransition } from "react";
 import axios from "axios";
 import { Container, Form, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
+import Loader from "../components/Loader";
 
 const ChangePassword = () => {
   const [ispending, startTransition] = useTransition();

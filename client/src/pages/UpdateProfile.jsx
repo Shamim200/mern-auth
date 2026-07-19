@@ -1,6 +1,7 @@
 import { useState, useTransition } from "react";
 import { Container, Form, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
+import Loader from "../components/Loader";
 
 const UpdateProfile = () => {
   const [ispending, startTransition] = useTransition();
