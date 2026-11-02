@@ -7,52 +7,63 @@ import { toast } from "react-toastify";
 import { useTransition } from "react";
 import Loader from "../components/Loader";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { SignInSchema } from "../validation";
+import { useFormik } from "formik";
 
 const SignIn = () => {
   const [ispending, startTransition] = useTransition();
-  const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
 
-  const { setUser } = UseAuth(); // destructuring
+  const { setUser, showPassword, handelShowPassword } = UseAuth(); // destructuring
 
-  const handelSubmit = async (e) => {
-    e.preventDefault();
+  const { errors, values, handleChange, handleSubmit, touched, handleBlur } =
+    useFormik({
+      initialValues: {
+        email: "",
+        password: "",
+      },
 
-    startTransition(async () => {
-      try {
-        const response = await axios.post(
-          `/api/v1/users/signin`,
-          {
-            email,
-            password,
-          },
-          {
-            withCredentials: true,
-            headers: {
-              "Content-Type": "application/json",
-            },
+      validationSchema: SignInSchema,
+
+      onSubmit: async (values, { resetForm }) => {
+        resetForm({ values: "" });
+
+        startTransition(async () => {
+          try {
+            const response = await axios.post(
+              `/api/v1/users/signin`,
+              {
+                ...values,
+              },
+              {
+                withCredentials: true,
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+
+            if (response.status === 200) {
+              // const token = response.data.data?.accessToken;
+              // localStorage.setItem("accessToken", token);
+              setUser(response.data.data);
+              toast.success("User Sign In Successfully✅");
+              setRedirect(true);
+            }
+          } catch (error) {
+            if (error?.status === 400) {
+              toast.error("Bad Request!");
+            } else if (error?.status === 401) {
+              toast.error("unauthrized request");
+            } else if (error?.status === 404) {
+              toast.error("Invalid user credential");
+            } else if (error?.status === 500) {
+              toast.error("Internal server error");
+            }
           }
-        );
-        setEmail("");
-        setPassword("");
-        if (response.status === 200) {
-          const token = response.data.data?.accessToken;
-          localStorage.setItem("accessToken", token);
-          setUser(response.data.data);
-          toast.success("user signin successfully");
-          setRedirect(true);
-        } else if (response.status === 401) {
-          toast.error("Unauthorized: Invalid credentials❌");
-        } else {
-          toast.error("user signin failed");
-        }
-      } catch (error) {
-        console.log("signin error: ", error?.message);
-      }
+        });
+      },
     });
-  };
 
   if (redirect) {
     return <Navigate to="/dashboard" />;
@@ -60,33 +71,43 @@ const SignIn = () => {
 
   return (
     <Container>
-      <Form onSubmit={handelSubmit}>
+      <Form onSubmit={handleSubmit}>
         <h4 className="text-capitalize text-center mt-5">user sign in form</h4>
         <Form.Group className="mb-3">
           <Form.Control
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            type="email"
+            name="email"
+            id="email"
+            autoComplete="off"
+            value={values.email}
+            onBlur={handleBlur}
+            onChange={handleChange}
             placeholder="Email"
+            type="email"
             required
           />
+          {touched.email && errors.email && (
+            <p className="text-danger my-2">{errors.email}</p>
+          )}
         </Form.Group>
         <Form.Group className="mb-3">
           <InputGroup>
             <Form.Control
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              type={showPassword ? "password" : "text"}
+              name="password"
+              id="password"
+              value={values.password}
+              onBlur={handleBlur}
+              onChange={handleChange}
               placeholder="Password"
+              type={showPassword ? "text" : "password"}
               required
             />
-            <Button
-              onClick={() => setShowPassword(!showPassword)}
-              style={{ zIndex: 0 }} // Bootstrap-এর ফোকাস বর্ডার ওভারল্যাপ ঠিক রাখতে
-            >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            <Button onClick={() => handelShowPassword()} style={{ zIndex: 0 }}>
+              {showPassword ? <FaEye /> : <FaEyeSlash />}
             </Button>
           </InputGroup>
+          {touched.password && errors.password && (
+            <p className="text-danger my-2">{errors.password}</p>
+          )}
         </Form.Group>
         <Link
           className="text-decoration-none text-primary"

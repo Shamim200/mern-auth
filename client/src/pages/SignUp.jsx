@@ -9,12 +9,14 @@ import { SignUpSchema } from "../validation";
 import { useTransition } from "react";
 import Loader from "../components/Loader";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { UseAuth } from "../context/Auth";
 
 const SignUp = () => {
   const [isPending, startTransition] = useTransition();
-  const [showPassword, setShowPassword] = useState(false);
   const [redirect, setRedirect] = useState(false);
   const fileInputRef = useRef(null); // Add a ref for the file input
+
+  const { showPassword, handelShowPassword } = UseAuth();
 
   const {
     errors,
@@ -55,15 +57,12 @@ const SignUp = () => {
           );
           if (res.status === 201) {
             setRedirect(true);
-
-            toast.success("Sign Up successfully✅");
-          } else if (res.status === 409) {
-            toast.error("User already exists❌");
-          } else {
-            toast.error("Sign Up failed❌");
+            toast.success("Sign Up Successfully✅");
           }
         } catch (error) {
-          console.log("Signup error: ", error?.message);
+          if (error?.status === 409) {
+            toast.error("User already exists!");
+          }
         }
       });
     },
@@ -97,6 +96,7 @@ const SignUp = () => {
           <Form.Control
             name="username"
             id="username"
+            autoComplete="off"
             value={values.username}
             onBlur={handleBlur}
             onChange={handleChange}
@@ -113,6 +113,7 @@ const SignUp = () => {
           <Form.Control
             name="email"
             id="email"
+            autoComplete="off"
             value={values.email}
             onBlur={handleBlur}
             onChange={handleChange}
@@ -133,14 +134,11 @@ const SignUp = () => {
               onBlur={handleBlur}
               onChange={handleChange}
               placeholder="Password"
-              type={showPassword ? "password" : "text"}
+              type={showPassword ? "text" : "password"}
               required
             />
-            <Button
-              onClick={() => setShowPassword(!showPassword)}
-              style={{ zIndex: 0 }}
-            >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            <Button onClick={() => handelShowPassword()} style={{ zIndex: 0 }}>
+              {showPassword ? <FaEye /> : <FaEyeSlash />}
             </Button>
           </InputGroup>
           {touched.password && errors.password && (

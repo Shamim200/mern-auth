@@ -1,37 +1,51 @@
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import { Container, Form, Button } from "react-bootstrap";
+import axios from "axios";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";
+import { UpdateProfileSchma } from "../validation";
+import { useFormik } from "formik";
 
 const UpdateProfile = () => {
   const [ispending, startTransition] = useTransition();
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const { errors, values, touched, handleBlur, handleChange, handleSubmit } =
+    useFormik({
+      initialValues: {
+        username: "",
+        email: "",
+      },
 
-    startTransition(async () => {
-      try {
-        const response = await fetch("/api/v1/users/update-profile", {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, email }),
+      validationSchema: UpdateProfileSchma,
+      onSubmit: async (values, { resetForm }) => {
+        resetForm({ values: "" });
+        startTransition(async () => {
+          try {
+            const response = await axios.patch(
+              "/api/v1/users/update-profile",
+              {
+                ...values,
+              },
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+
+            if (response.status === 200) {
+              toast.success("Profile Updated Successfully✅");
+            } else {
+              toast.error("Profile Updating Failed❌");
+            }
+          } catch (error) {
+            console.log("Profile Updating Failed: ", error?.message);
+            toast.error("Profile Updating Failed❌");
+          }
         });
-
-        if (response.status === 200) {
-          toast.success("Profile updated successfully✅");
-        } else {
-          toast.error("Profile updating failed❌");
-        }
-        setUsername("");
-        setEmail("");
-      } catch (error) {
-        console.log("profile updating failed: ", error.message);
-        toast.error("Profile updating failed❌");
-      }
+      },
     });
-  };
+
   return (
     <Container>
       <Form onSubmit={handleSubmit}>
@@ -40,21 +54,33 @@ const UpdateProfile = () => {
         </h4>
         <Form.Group className="mb-3">
           <Form.Control
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            name="username"
+            id="username"
+            value={values.username}
+            onChange={handleChange}
+            onBlur={handleBlur}
             type="text"
             placeholder="User Name"
             required
           />
+          {touched.username && errors.username && (
+            <p className="text-danger my-2">{errors.username}</p>
+          )}
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Control
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            id="email"
+            value={values.email}
+            onChange={handleChange}
+            onBlur={handleBlur}
             type="email"
             placeholder="Email"
             required
           />
+          {touched.email && errors.email && (
+            <p className="text-danger my-2">{errors.email}</p>
+          )}
         </Form.Group>
 
         <Button variant="outline-success" type="submit" ispending={ispending}>
