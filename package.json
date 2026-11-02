@@ -6,7 +6,8 @@
   "scripts": {
     "server": "node --watch server/index.js",
     "client": "cd client && npm run dev",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "test": "vitest"
   },
   "keywords": [
     "Mern Auth",
