@@ -4,7 +4,7 @@ import Routers from "./routers/Routers";
 
 const App = () => {
   return (
-    <div>
+    <>
       <Headers />
       <Routers />
       <ToastContainer
@@ -20,7 +20,7 @@ const App = () => {
         theme="light"
         transition={Bounce}
       />
-    </div>
+    </>
   );
 };
 
