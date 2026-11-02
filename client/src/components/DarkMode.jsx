@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { FaSun } from "react-icons/fa";
 import { FaMoon } from "react-icons/fa";
+import { Button } from "react-bootstrap";
 const DarkMode = () => {
   const [toggle, setToggle] = useState(true);
   const [theme, setTheme] = useState("light-theme");
@@ -20,9 +21,9 @@ const DarkMode = () => {
     }
   }, [theme]);
   return (
-    <div onClick={handleToggle} className="dark-icon">
+    <Button onClick={handleToggle} variant="dark" className="dark-icon">
       {toggle ? <FaSun /> : <FaMoon />}
-    </div>
+    </Button>
   );
 };
 export default DarkMode;
