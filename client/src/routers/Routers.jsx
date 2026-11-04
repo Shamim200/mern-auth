@@ -1,6 +1,6 @@
 import { Suspense, lazy } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import Loading from "../components/Loading";
+import Loader from "../components/Loader";
 import Protect from "./Protect";
 
 const SignIn = lazy(() => import("../pages/SignIn"));
@@ -13,7 +13,7 @@ const ForgotPassword = lazy(() => import("../pages/ForgotPassword"));
 
 const Routers = () => {
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<Loader />}>
       <Routes>
         {/* public route */}
         <Route path="/" element={<Navigate to="/signup" />} />
