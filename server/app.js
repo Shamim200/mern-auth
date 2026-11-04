@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import userRouter from "./src/routes/user.routes.js";
+import userRouter from "./src/routes/user.route.js";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import { globalRateLimitConfig } from "./src/config/rateLimitConfig.js";
