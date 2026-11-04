@@ -15,6 +15,24 @@ const authList = [
     links: "/signup",
   },
 ];
+
+const routeList = [
+  {
+    id: 1,
+    name: "dashboard",
+    path: "/dashboard",
+  },
+  {
+    id: 2,
+    name: "change password",
+    path: "/change-password",
+  },
+  {
+    id: 3,
+    name: "update profile",
+    path: "/update-profile",
+  },
+];
 const Headers = () => {
   const { user, userLogout } = UseAuth();
 
@@ -36,7 +54,7 @@ const Headers = () => {
               <NavDropdown
                 title={
                   <img
-                    src={`${"public/vite.svg"}`}
+                    src={`${"public/profile.jpg"}`}
                     alt="avatar"
                     style={{
                       width: "30px",
@@ -48,27 +66,19 @@ const Headers = () => {
                 }
                 id="nav-dropdown"
               >
-                <NavDropdown.Item
-                  as={NavLink}
-                  to="/dashboard"
-                  className="text-capitalize text-decoration-none"
-                >
-                  Dashboard
-                </NavDropdown.Item>
-                <NavDropdown.Item
-                  as={NavLink}
-                  className="text-capitalize text-decoration-none"
-                  to="/change-password"
-                >
-                  Change Password
-                </NavDropdown.Item>
-                <NavDropdown.Item
-                  as={NavLink}
-                  className="text-capitalize text-decoration-none"
-                  to="/update-profile"
-                >
-                  Update Profile
-                </NavDropdown.Item>
+                {routeList.map((item) => {
+                  const { id, name, path } = item;
+                  return (
+                    <NavDropdown.Item
+                      key={id}
+                      as={NavLink}
+                      to={path}
+                      className="text-capitalize text-decoration-none"
+                    >
+                      {name}
+                    </NavDropdown.Item>
+                  );
+                })}
                 <NavDropdown.Item
                   className="text-capitalize"
                   onClick={userLogout}
