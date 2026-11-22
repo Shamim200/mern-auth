@@ -3,6 +3,7 @@ import User from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
+import { uploadCloudinary } from "../utils/cloudinary.js";
 
 // genarate access & refresh token
 
@@ -48,8 +49,19 @@ export const userSignup = AsyncHandler(async (req, res) => {
     throw new ApiError(409, "User already exists");
   }
 
-  // const avatar = req.file.path;
-  // const avatarUrl = `http://localhost:8000/${avatar}`;
+  const avatarLocalPath = req.file?.path;
+
+  console.log(avatarLocalPath);
+
+  if (!avatarLocalPath) {
+    throw new ApiError(400, "avatar is required");
+  }
+
+  const avatar = await uploadCloudinary(avatarLocalPath);
+
+  if (!avatar) {
+    throw new ApiError(500, "avtar upload failed");
+  }
 
   // create user
   const user = await User.create({
@@ -57,7 +69,7 @@ export const userSignup = AsyncHandler(async (req, res) => {
     username,
     email,
     password,
-    // avatar: avatarUrl,
+    avatar: avatar.url,
   });
 
   const users = await User.findById(user._id).select("-password -refreshToken");
