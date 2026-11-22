@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import { Container, Form, Button } from "react-bootstrap";
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -6,7 +7,7 @@ const ForgotPassword = () => {
   const handelSubmit = (e) => {
     e.preventDefault();
     setEmail("");
-    console.log(email);
+    console.log("User email: ", email);
   };
   return (
     <Container className="my-5">
@@ -18,6 +19,7 @@ const ForgotPassword = () => {
             onChange={(e) => setEmail(e.target.value)}
             type="email"
             placeholder="Enter email"
+            required
           />
         </Form.Group>
         <Button variant="outline-success" className="my-3" type="submit">
